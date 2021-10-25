@@ -1,0 +1,109 @@
+@startuml
+
+class Application {
+    void start(Stage)
+    {static} void main(String[] args)
+}
+
+Application o-- ApplicationController
+
+class ApplicationController {
+    -Button createToDoButton
+    -Button exportButton
+    -MenuItem exportMenu
+    -Button importButton
+    -MenuItem importMenu
+    -TableView<ToDoList> listTable
+    -TableColumn<ToDoList, String> listTitleColumn
+    -TextField newListField
+    -Button removeToDoButton
+    -TableColumn<ToDoList, CheckBox> selectListColumn
+    -Label selectedListCounter
+    -ObservableList<ToDoList> lists
+    -boolean nameDateValue
+
+    +void initialize()
+    +void onSelectList(ActionEvent event)
+    +void onExportButtonClicked(ActionEvent event)
+    +void onImportButtonClicked(ActionEvent event)
+    +void onNewListName(ActionEvent event)
+    +void onRemoveButtonClicked(ActionEvent event)
+    +void onCreateListButtonClicked(ActionEvent event)
+    +void addNewList(ToDoList temp)
+    +void removeList(ToDoList temp)
+    +ObservableList<ToDoList> getList()
+    +void setList(ObservableList<ToDoList> newList)
+
+}
+
+class ListItemsController {
+    -Button addItemButton
+    -TableColumn<Item, CheckBox> checkboxColumn
+    -TableColumn<Item, String> dateColumn
+    -TextField dateField
+    -Button deleteItemButton
+    -Button deleteListButton
+    -TableColumn<Item, String> descriptionColumn
+    -TextField descriptionField
+    -Label itemCountLabel
+    -TableView<Item> itemTable
+    -TextField listNameField
+    -Button saveListButton
+    -ToDoList list
+    -String date
+    -boolean dateValidate
+
+    +void initialize()
+    +void editItemDate(ActionEvent event)
+    +void editItemDescription(ActionEvent event)
+    +void onDeleteItemClicked(ActionEvent event)
+    +void onDeleteListClicked(ActionEvent event)
+    +void onSaveListClicked(ActionEvent event)
+    +void validateDateField(ActionEvent event)
+    +void addList(ToDoList temp)
+    +ToDoList getList()
+    +TextField getDateField()
+    +TextField getListNameField()
+}
+
+ApplicationController <--> ListItemsController
+
+class ListFileHandler {
+    -File path
+    -List<ToDoList> list
+
+    +List<ToDoList> fileImport()
+    +String fileExport()
+}
+
+ApplicationController o-- ListFileHandler
+
+class ToDoList {
+    -SimpleStringProperty title
+    -CheckBox select
+    -List<Item> items
+
+    +String getTitle()
+    +CheckBox getSelect()
+    +List<Item> getItems()
+    +void setTitle(String)
+    +void setItems(List<Item>)
+    +int getNumberOfItems()
+    +String toString()
+}
+
+class Item {
+    -SimpleStringProperty description
+    -SimpleStringProperty dueDate
+    -CheckBox completed
+
+    +String getDescription()
+    +String getDate()
+    +CheckBox getCompleted()
+    +void setDescription(String)
+    +void setDate(String)
+}
+
+ToDoList *-- "many" Item : contains
+
+@enduml
